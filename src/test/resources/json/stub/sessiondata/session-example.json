@@ -1,0 +1,15 @@
+{
+  "activeClient": {
+    "mdmOsnClient": "1784130520",
+    "mdmPkbClient": null
+  },
+  "firstName": "Аркадий",
+  "ids": {
+    "acUniqueClientNumber": null,
+    "login": null,
+    "mdmOsn": "4444444444"
+  },
+  "lastName": "Тестов",
+  "middleName": "Тестович",
+  "position": null
+}

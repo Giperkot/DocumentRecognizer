@@ -1,0 +1,101 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="20210903123" author="istvolov" logicalFilePath="no_path">
+        <comment>
+            Создание схемы auth.
+        </comment>
+        <sql>
+            create schema auth;
+
+            CREATE TABLE auth.user (
+                id bigserial NOT NULL primary key,
+                name varchar(100) NOT NULL,
+                surname varchar(100) NOT NULL,
+                middlename varchar(100) NOT NULL,
+                email varchar(100) NOT NULL unique,
+                password varchar(100) NOT NULL,
+                salt varchar(100) not null,
+                register_date timestamp NOT NULL
+            );
+
+            alter table auth.user
+                add column base64 varchar(100);
+            create index user_base64_index
+                on auth."user" (base64);
+
+            alter table auth.user
+                drop column base64;
+
+            CREATE TABLE auth.session (
+                id bigserial NOT NULL primary key,
+                session_key varchar(110) DEFAULT NULL,
+                user_id bigint NOT NULL references auth.user(id),
+                create_time timestamp NOT NULL default now(),
+                update_time timestamp NOT NULL
+            );
+            create unique index session_session_key_uindex
+                on auth.session (session_key);
+
+            -- alter table auth."user" rename column middle_name to middlename;
+
+
+            /**
+                abilities
+             */
+
+            create schema abilities;
+
+            CREATE TABLE abilities.role (
+                id bigserial NOT NULL primary key,
+                name character varying(255) NOT NULL,
+                title character varying(255) NOT NULL,
+                description text
+            );
+
+            CREATE TABLE abilities.permission (
+                id bigserial NOT NULL primary key,
+                name character varying(255) NOT NULL,
+                title character varying(255) NOT NULL,
+                type character varying(255) NOT NULL,
+                description text
+            );
+
+
+            create table abilities.user_to_permission (
+                 user_id bigint NOT NULL
+                     references auth.user(id),
+                 permission_id bigint not null
+                     references abilities.permission(id),
+                 PRIMARY KEY (user_id, permission_id)
+            );
+
+            create table abilities.user_to_role (
+                 user_id bigint NOT NULL
+                     references auth.user(id),
+                 role_id bigint not null
+                     references abilities.role(id),
+                 PRIMARY KEY (user_id, role_id)
+            );
+
+            create table abilities.permission_to_role (
+                 permission_id bigint NOT NULL
+                     references abilities.permission(id),
+                 role_id bigint not null
+                     references abilities.role(id),
+                 PRIMARY KEY (permission_id, role_id)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210903123" author="istvolov" logicalFilePath="no_path">
+        <comment>
+            Создание схемы auth.
+        </comment>
+        <sql>
+            INSERT INTO auth."user" (id, name, surname, middlename, email, password, salt, register_date) VALUES (2, 'admin', 'admin', 'admin', 'admin@mail.ru', '$2a$10$G4Wejbvh0XoK6zmNvRsUR.LIQHLaiwRQkpp0jDLcE97nYQl0XpV7a', '$2a$10$G4Wejbvh0XoK6zmNvRsUR.', '2021-09-04 17:04:48.177000');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

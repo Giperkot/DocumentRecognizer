@@ -1,0 +1,15 @@
+{
+  "accounts" : {},
+  "deposites" : {},
+  "cards" : {},
+  "investments" : {},
+  "loans" : {},
+  "packages" : {},
+  "insuranceContracts" : {},
+  "selfEmploymentInfo" : {},
+  "relations" : [],
+  "system" : "SERVICE_BALANCE",
+  "userId" : "1371988972",
+  "timestamp" : "2021-08-11T13:01:41.235",
+  "result" : "OK"
+}

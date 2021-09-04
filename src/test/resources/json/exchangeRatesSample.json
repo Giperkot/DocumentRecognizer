@@ -1,0 +1,62 @@
+{
+  "id": "32cd07ce7bb64a8493c2eaa235d04d79",
+  "timestamp": "2021-04-29T13:09:43.697640Z",
+  "ratesGroups": [{
+    "category": "VTB24.CashlessPhysCourseCurr.0.2",
+    "rates": [{
+      "id": "50cffee8f1ed49d5858b74dbfec399e4",
+      "scale": 1,
+      "bid": 8.3395,
+      "offer": 8.4455,
+      "tradable": true,
+      "currency1": {
+        "alphaCode": "USD",
+        "numCode": "840"
+      },
+      "currency2": {
+        "alphaCode": "SEK",
+        "numCode": "752"
+      },
+      "dateRange": {
+        "from": "2021-04-29T00:05:04.612Z",
+        "to": null
+      },
+      "amountRange": {
+        "currency": {
+          "alphaCode": "USD",
+          "numCode": "840"
+        },
+        "min": 100000.0,
+        "max": null
+      }
+    }, {
+      "id": "4e083ca980064bfd9543943219209284",
+      "scale": 1,
+      "bid": 6.4,
+      "offer": 6.6,
+      "tradable": true,
+      "currency1": {
+        "alphaCode": "USD",
+        "numCode": "840"
+      },
+      "currency2": {
+        "alphaCode": "CNY",
+        "numCode": "156"
+      },
+      "dateRange": {
+        "from": "2021-04-29T00:05:04.612Z",
+        "to": null
+      },
+      "amountRange": {
+        "currency": {
+          "alphaCode": "USD",
+          "numCode": "840"
+        },
+        "min": 10000.0,
+        "max": 100000.0
+      }
+    }
+    ]
+  }
+  ]
+}

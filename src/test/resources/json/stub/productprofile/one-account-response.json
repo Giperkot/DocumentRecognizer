@@ -1,0 +1,38 @@
+{
+  "accounts": {
+    "4-CURRENT_ACCOUNT-40817392101004000017": {
+      "timestamp": "2020-10-13T11:59:41.189",
+      "state": "PRODUCT_ACTUAL",
+      "entitySubSystems": "PROFILE",
+      "entityType": "CURRENT_ACCOUNT",
+      "entityId": "40817392101004000017",
+      "number": "40817392101004000018",
+      "entityLocalId": "402019386640",
+      "entityName": "Текущий счетЯпонская йена (JPY)",
+      "openDate": "2018-11-23",
+      "closeDate": "2018-11-23",
+      "balance": {
+        "currency": "RUR",
+        "amount": 78
+      },
+      "expireDate": "2018-11-23",
+      "mayDebit": true,
+      "mayCredit": true,
+      "userId": "1408164",
+      "organisationUnit": "00000",
+      "externalIdPart1": "40817392101004000017",
+      "publicId": "11776EEC82CC49CAB9FB06102E8E480D",
+      "version": "2020-09-11T17:32:44.613",
+      "status": "cm.BankAccountStatus.Closed",
+      "overdraft": {
+        "status": false,
+        "ownBalance": 0
+      },
+      "blockedAmount": 0,
+      "visible": false,
+      "extended": true,
+      "favourite": false,
+      "valid": true
+    }
+  }
+}

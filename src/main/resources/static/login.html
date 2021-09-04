@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru-RU">
+
+<head>
+    <title>Авторизация</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+</head>
+<body>
+
+<div class="main">
+    <div class="form">
+        <div class="form-toggle"></div>
+        <div class="form-panel one">
+            <div class="form-header">
+                <h1>Вход</h1>
+            </div>
+            <div class="form-content">
+                <form class="auth_form" action="/login" method="post">
+                    <div class="form-group">
+                        <label for="username">Логин</label>
+                        <input type="text" class="user_field" name="username" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" class="password_field" name="password" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-remember">
+                            <input type="checkbox"/>Запомнить меня
+                        </label><a class="form-recovery" href="#">Напомнить пароль?</a>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="enter_btn">Вход</button>
+                    </div>
+
+                    <div class="login_message">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="form-panel two">
+            <div class="form-header">
+                <h1>Регистрация</h1>
+            </div>
+            <div class="form-content">
+                <form>
+                    <div class="form-group">
+                        <label for="username">Логин</label>
+                        <input type="text" id="username" name="username" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" name="password" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="cpassword">Подтверждение пароля</label>
+                        <input type="password" name="cpassword" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="register_btn">Регистрация</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='js/jquery.js'></script>
+<script type="text/javascript" src="/js/helper.js"></script>
+<script type="text/javascript" src="/js/pages/login.js"></script>
+</body>
+</html>
