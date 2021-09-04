@@ -1,5 +1,7 @@
 package ru.digitalsoft.document.dto.document;
 
+import ru.digitalsoft.document.dto.enums.EDocType;
+
 import java.time.LocalDate;
 
 public class CommonDocDto {
@@ -9,6 +11,8 @@ public class CommonDocDto {
     private LocalDate date;
 
     private String inn;
+
+    private EDocType docType;
 
     public CommonDocDto(String okud, LocalDate date, String inn) {
         this.okud = okud;
@@ -38,5 +42,13 @@ public class CommonDocDto {
 
     public void setInn(String inn) {
         this.inn = inn;
+    }
+
+    public EDocType getDocType() {
+        return docType;
+    }
+
+    public void setDocType(EDocType docType) {
+        this.docType = docType;
     }
 }
