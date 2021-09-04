@@ -17,7 +17,8 @@ public class PdfRecognizeTest {
 
 //    @Test
     public static void main (String... args) throws IOException, TesseractException {
-        File pdfFile = new File ("C:\\Users\\istvolov\\Documents\\leaderSoft 2021\\Тестовый dataset\\Тестовый dataset\\ПАО НКХП 2315014748\\Финансовое досье\\2020\\4 квартал\\Бухгалтерская отчетность\\Форма 1.pdf");
+//        File pdfFile = new File ("C:\\Users\\istvolov\\Documents\\leaderSoft 2021\\Тестовый dataset\\Тестовый dataset\\ПАО НКХП 2315014748\\Финансовое досье\\2020\\4 квартал\\Бухгалтерская отчетность\\Форма 1.pdf");
+        File pdfFile = new File ("C:\\Users\\istvolov\\Documents\\leaderSoft 2021\\Тестовый dataset\\Тестовый dataset\\ПАО НКХП 2315014748\\Финансовое досье\\2020\\4 квартал\\Бухгалтерская отчетность\\Форма 2.pdf");
         String str = pdfService.getTextFromPdf(pdfFile);
 
         System.out.println(str);

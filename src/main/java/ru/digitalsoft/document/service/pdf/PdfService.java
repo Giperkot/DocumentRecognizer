@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.stereotype.Service;
+import ru.digitalsoft.document.dto.document.CommonDocDto;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,13 +14,25 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service
 public class PdfService {
 
-    public static BufferedImage rotate(BufferedImage img, double angle)
-    {
+    private void cut (BufferedImage img, int x, int y) throws IOException {
+
+        /*BufferedImage newImage = new BufferedImage(
+                img.getWidth(), img.getHeight(), img.getType());*/
+        BufferedImage dest = img.getSubimage(x, y, img.getWidth() - x, img.getHeight() - y);
+
+        File outputfile = new File("cuted.jpg");
+        ImageIO.write(dest, "jpg", outputfile);
+
+
+    }
+
+    public static BufferedImage rotate(BufferedImage img, double angle) {
 
         // Getting Dimensions of image
         int width = img.getWidth();
@@ -107,13 +120,13 @@ public class PdfService {
 //        int color = image.getRGB(x, y);
 
         int colSumm = 0;
-        for (int i = -3; i < 3; i++) {
-            for (int j = -3; j < 3; j++) {
+        for (int i = -1; i < 1; i++) {
+            for (int j = -1; j < 1; j++) {
                 colSumm = colSumm(image.getRGB(x - j, y - i));
             }
         }
 
-        if (colSumm / 36 < 60) {
+        if (colSumm / 9 < 60) {
             return true;
         }
 
@@ -122,8 +135,8 @@ public class PdfService {
 
     private Point getRectangleLeftCorner (BufferedImage image) {
 
-//        List<Point> pointList = new ArrayList<>();
-        
+        java.util.List<Point> pointList = new ArrayList();
+
         for (int y = 100; y < image.getHeight() - 300; y++) {
             label:
             for (int x = 100; x < image.getWidth() - 300; x++) {
@@ -141,6 +154,7 @@ public class PdfService {
                     }
                 }
 
+//                pointList.add(new Point(x, y));
                 return new Point(x, y);
             }
         }
@@ -160,33 +174,104 @@ public class PdfService {
         tesseract.setOcrEngineMode(1);
 
         StringBuilder stringBuilder = new StringBuilder();
+        Point cornerRect = null;
+        BufferedImage rotated = null;
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < Math.min(3, pagesCount); i++) {
             BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(i, 300, ImageType.RGB);
 
             if (i == 0) {
                 double angle = getPageAngle(bufferedImage);
 
-                BufferedImage rotated = rotate(bufferedImage, -angle * 180 / Math.PI);
+                rotated = rotate(bufferedImage, -angle * 180 / Math.PI);
 
-                Point cornerRect = getRectangleLeftCorner(rotated);
+                cornerRect = getRectangleLeftCorner(rotated);
+
+                cut(rotated, cornerRect.x, cornerRect.y);
 
                 File outputfile = new File(i + "image.jpg");
                 ImageIO.write(rotated, "jpg", outputfile);
-
-                // 1891, 595, 163, 39
-                System.out.println(angle * 180 / Math.PI);
 //                System.out.println(tesseract.doOCR(bufferedImage, new Rectangle(1796, 530, 341, 574)));
             }
 
-//            stringBuilder.append(tesseract.doOCR(bufferedImage));
-
-
+            stringBuilder.append(tesseract.doOCR(bufferedImage));
         }
+
+        // Определить тип документа
+        String text = stringBuilder.toString();
+
+        System.out.println(text);
+        boolean isValid = false;
+
+        if (text.contains("Бухгалтерский баланс")) {
+            parseBugBalance(tesseract, rotated, cornerRect, text);
+        }
+
+        if (text.contains("Отчет о финансовых результатах")) {
+            parseFinResults(tesseract, rotated, cornerRect, text);
+        }
+
+
 
 
 //        System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
+    }
+
+    private boolean parseFinResults (Tesseract tesseract, BufferedImage rotated, Point cornerRect, String text) throws TesseractException {
+        /**
+         * 1. Отчет о финансовых результатах
+         * 2. Форма по ОКУД 0710002
+         * 3. Дата (число,месяц,год) если месяц = 3  размещение папка = год ==>1кв и тп)
+         * 4. Чистая прибыль
+         * 5. Налог на прибыль
+         */
+        text = text.toLowerCase();
+
+        if (!(text.contains("чистая прибыль") && text.contains("налог на прибыль") && text.contains("форма по окуд"))) {
+            return false;
+        }
+
+        CommonDocDto commonDocDto = parseOkudAndInn(tesseract, rotated, cornerRect);
+
+        return true;
+    }
+
+    private boolean parseBugBalance (Tesseract tesseract, BufferedImage rotated, Point cornerRect, String text) throws TesseractException {
+        text = text.toLowerCase();
+
+        if (!(text.contains("актив") && text.contains("пассив") && text.contains("форма по окуд"))) {
+            return false;
+        }
+
+        CommonDocDto commonDocDto = parseOkudAndInn(tesseract, rotated, cornerRect);
+
+        return true;
+    }
+
+    private CommonDocDto parseOkudAndInn (Tesseract tesseract, BufferedImage rotated, Point cornerRect) throws TesseractException {
+        int top = cornerRect.y;
+        String okud = tesseract.doOCR(rotated, new Rectangle(cornerRect.x, top, 700, 50));
+        String numOkud = okud.trim().replaceAll("[^0-9]", "");
+
+        if (numOkud.isEmpty()) {
+            top += 50;
+            okud = tesseract.doOCR(rotated, new Rectangle(cornerRect.x, top, 700, 50));
+            numOkud = okud.replaceAll("[^0-9]]", "");
+        }
+
+        String dateStr = tesseract.doOCR(rotated, new Rectangle(cornerRect.x, top + 50, 700, 50)).trim();
+        String inn = tesseract.doOCR(rotated, new Rectangle(cornerRect.x, top + 195, 700, 50)).trim();
+
+        String[] dateParts = dateStr.split("|");
+        LocalDate localDate = null;
+
+        if (dateParts.length == 3) {
+            localDate = LocalDate.of(Integer.parseInt(dateParts[2].trim()), Integer.parseInt(dateParts[1].trim()), Integer.parseInt(dateParts[0].trim()));
+        }
+        System.out.println("numOkud: " + okud + " inn: " + inn + " date: " + dateStr);
+
+        return new CommonDocDto(numOkud, localDate, inn);
     }
 
 }
