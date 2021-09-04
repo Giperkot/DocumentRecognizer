@@ -1,0 +1,52 @@
+
+.x-tab.x-tab-rotate-left .x-close-icon-el {
+    right: 0;
+    top: 6px;
+    left: auto;
+}
+.header {
+    font-size: 17px;
+    font-weight: bold;
+}
+.min_width_411 {
+    min-width: 411px;
+}
+
+.x-tab-close-btn:before, .x-tool-close:before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    background: url("../images/cross.png") center center no-repeat;
+    background-size: 80%;
+}
+.x-tab-navigation .x-tab-close-btn {
+    top: 27px;
+    right: 5px;
+    width: 16px;
+    height: 16px;
+    font: 12px/1 'Font Awesome 5 Free';
+    color: #fff;
+}
+
+.x-tagfield-item-close:before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: url("../images/cross.png") center center no-repeat;
+    background-size: 80%;
+}
+
+/*.user_info_container {
+    display: flex;
+    align-items: center;
+}*/
+
+.x-form-cb-checked .x-form-checkbox-default:before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    background: url("../images/checkmarksquare.svg") center center no-repeat;
+    background-size: 100%;
+    position: absolute;
+    left: 0;
+}
