@@ -10,7 +10,10 @@ import ru.digitalsoft.document.dao.entity.DocumentTypeEntity;
 import ru.digitalsoft.document.dao.repositories.DocumentTypeEntityRepository;
 import ru.digitalsoft.document.dto.parse.ParseDto;
 import ru.digitalsoft.document.service.DocumentRecognizerService;
+import ru.digitalsoft.document.service.connect.HacatonConnectorApacheService;
+import ru.digitalsoft.document.service.connect.HacatonConnectorSpringService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +28,19 @@ public class DocumentRecognizerController {
 
     private DocumentTypeEntityRepository repository;
 
+    private HacatonConnectorSpringService hacatonConnectorSpringService;
+
+    private HacatonConnectorApacheService hacatonConnectorApacheService;
+
     @Autowired
-    public DocumentRecognizerController(DocumentRecognizerService documentRecognizerService, DocumentTypeEntityRepository repository) {
+    public DocumentRecognizerController(DocumentRecognizerService documentRecognizerService,
+                                        DocumentTypeEntityRepository repository,
+                                        HacatonConnectorSpringService hacatonConnectorSpringService,
+                                        HacatonConnectorApacheService hacatonConnectorApacheService) {
         this.documentRecognizerService = documentRecognizerService;
         this.repository = repository;
+        this.hacatonConnectorSpringService = hacatonConnectorSpringService;
+        this.hacatonConnectorApacheService = hacatonConnectorApacheService;
     }
 
     @GetMapping("/scan")
@@ -52,5 +64,15 @@ public class DocumentRecognizerController {
         }
 
         return parseDtoList;
+    }
+
+    @GetMapping("/connect/hacaton/spring")
+    public void connectSpring() {
+        hacatonConnectorSpringService.sendInfoToHacatonServer();
+    }
+
+    @GetMapping("/connect/hacaton/apache")
+    public void connectApache() throws IOException {
+        hacatonConnectorApacheService.sendInfoToHacatonServer();
     }
 }
