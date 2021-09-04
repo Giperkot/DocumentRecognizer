@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/clients")
 public class ClientController {
 
+    @RequestMapping("/clientList")
     public List<ClientDto> getClientList () {
 
     }
