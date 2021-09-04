@@ -6,7 +6,7 @@
  * TODO - Replace this content of this view to suite the needs of your application.
  */
 Ext.define('DocumentRecognizer.view.main.Main', {
-    extend: 'Ext.tab.Panel',
+    extend: 'Ext.panel.Panel',
     xtype: 'app-main',
 
     requires: [
@@ -21,13 +21,13 @@ Ext.define('DocumentRecognizer.view.main.Main', {
     controller: 'main',
     viewModel: 'main',
 
-    ui: 'navigation',
+    /*ui: 'navigation',
 
     tabBarHeaderPosition: 1,
     titleRotation: 0,
-    tabRotation: 0,
+    tabRotation: 0,*/
 
-    header: {
+    /*header: {
         layout: {
             align: 'stretchmax'
         },
@@ -55,49 +55,60 @@ Ext.define('DocumentRecognizer.view.main.Main', {
         wide: {
             headerPosition: 'left'
         }
-    },
+    },*/
+
 
     defaults: {
-        bodyPadding: 20,
-        tabConfig: {
-            responsiveConfig: {
-                wide: {
-                    iconAlign: 'left',
-                    textAlign: 'left'
-                },
-                tall: {
-                    iconAlign: 'top',
-                    textAlign: 'center',
-                    width: 120
-                }
-            }
-        }
+        tab: {
+            iconAlign: 'left'
+        },
+        styleHtmlContent: true
     },
 
-    items: [{
-        title: 'Home',
-        iconCls: 'fa fa-home',
-        // The following grid shares a store with the classic version's grid as well!
-        items: [{
-            xtype: 'mainlist'
-        }]
-    }, {
-        title: 'Users',
-        iconCls: 'fa fa-user',
-        bind: {
-            html: '{loremIpsum}'
+    tabBarPosition: 'left',
+
+    layout: 'vbox',
+
+    items: [
+        {
+            xtype: "container",
+            height: 40,
+            width: '100%',
+            layout: {
+                type: "hbox",
+                pack: "center",
+                align: "middle"
+            },
+            items: [
+                {
+                    xtype: "container",
+                    padding: "7 10",
+                    height: 30,
+                    minWidth: 150,
+                    bind: {
+                        html: "{userEmail}"
+                    }
+                }, {
+                    xtype: "container",
+                    padding: "7 10",
+                    height: 30,
+                    minWidth: 300,
+                    bind: {
+                        html: "{userInfo}"
+                    }
+                },
+                {
+                    xtype: "button",
+                    height: 30,
+                    width: 100,
+                    text: "Выход",
+                    handler: 'onExitUser'
+                }
+            ]
+        }, {
+            xtype: 'menu-main',
+            reference: 'mainTabPanel',
+            flex: 1
         }
-    }, {
-        title: 'Groups',
-        iconCls: 'fa fa-users',
-        bind: {
-            html: '{loremIpsum}'
-        }
-    }, {
-        title: 'Settings',
-        iconCls: 'fa fa-cog',
-        bind: {
-            html: '{loremIpsum}'
-        }
-    }]
+    ]
 });

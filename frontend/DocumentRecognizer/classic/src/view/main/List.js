@@ -16,9 +16,16 @@ Ext.define('DocumentRecognizer.view.main.List', {
     },
 
     columns: [
-        { text: 'Name',  dataIndex: 'name' },
-        { text: 'Email', dataIndex: 'email', flex: 1 },
-        { text: 'Phone', dataIndex: 'phone', flex: 1 }
+        {
+            text: '№',
+            renderer: function (arguments) {
+                console.log(arguments);
+                return arguments[1];
+            }
+        },
+        { text: 'Название организации',  dataIndex: 'name' },
+        { text: 'ИНН', dataIndex: 'inn', flex: 1 },
+        { text: 'КПП', dataIndex: 'kpp', flex: 1 }
     ],
 
     listeners: {

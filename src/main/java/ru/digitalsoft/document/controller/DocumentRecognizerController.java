@@ -11,7 +11,7 @@ import ru.digitalsoft.document.service.DocumentRecognizerService;
 import java.util.Map;
 
 @RestController
-@RequestMapping()
+@RequestMapping
 public class DocumentRecognizerController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentRecognizerController.class);
 
