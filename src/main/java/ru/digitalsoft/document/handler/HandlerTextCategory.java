@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.digitalsoft.document.enums.textcategory.BuhgalterOtchetnostForm1Promezh;
 import ru.digitalsoft.document.enums.textcategory.BuhgalterOtchetnostForm2Promezh;
-import ru.digitalsoft.document.utils.ExcelToText;
+import ru.digitalsoft.document.utils.ParserDate;
+
+import java.text.ParseException;
 
 public class HandlerTextCategory {
 
@@ -38,22 +40,14 @@ public class HandlerTextCategory {
 //4. Чистая прибыль
 //5. Налог на прибыль
 
-
-
-    public static void main(String[] args) throws Exception {
-        LOGGER.info("---Start test form 1---");
-        HandlerTextCategory handlerTextCategory1 = new HandlerTextCategory();
-        String forTest1 = ExcelToText.readFirstSheetFromXLS("D:\\resources\\Баланс_КАМАЗ_9 мес.2020.xls");
-        LOGGER.info(String.valueOf(handlerTextCategory1.checkIfStringBelongToBuhgalterOtchetnostForm1Promezh(forTest1)));
-        LOGGER.info(String.valueOf(handlerTextCategory1.checkIfStringBelongToBuhgalterOtchetnostForm2Promezh(forTest1)));
-        LOGGER.info("---End test form 1---");
-
-        LOGGER.info("---Start test form 2---");
-        HandlerTextCategory handlerTextCategory2 = new HandlerTextCategory();
-        String forTest2 = ExcelToText.readFirstSheetFromXLS("D:\\resources\\F2_КАМАЗ_09.2020.xls");
-        LOGGER.info(String.valueOf(handlerTextCategory2.checkIfStringBelongToBuhgalterOtchetnostForm1Promezh(forTest2)));
-        LOGGER.info(String.valueOf(handlerTextCategory2.checkIfStringBelongToBuhgalterOtchetnostForm2Promezh(forTest2)));
-        LOGGER.info("---End test form 2---");
+    public String definitionOfCategory(String text){
+        if (checkIfStringBelongToBuhgalterOtchetnostForm1Promezh(text)){
+            return BuhgalterOtchetnostForm1Promezh.GUID.getProperty();
+        } else if (checkIfStringBelongToBuhgalterOtchetnostForm2Promezh(text)) {
+            return BuhgalterOtchetnostForm2Promezh.GUID.getProperty();
+        } else {
+            return null;
+        }
     }
 
 // _5 BuhgalterOtchetnostForm1Promezh Бухгалтерская отчетность_форма 1 _промежуточная
@@ -91,7 +85,16 @@ public class HandlerTextCategory {
         }
 
 
-        //TODO здесь должна быть проверка на дату
+
+        try {
+            //TODO здесь бы желательно ещё учитывать параметры из Enum DATA_PART_...
+            ParserDate.parseDateByRegexpForExcel(text);
+            score++;
+            LOGGER.info("Найден " + BuhgalterOtchetnostForm1Promezh.DATA_PART_1.getProperty());
+        } catch (ParseException e) {
+           LOGGER.error("НЕ НАЙДЕН " + BuhgalterOtchetnostForm1Promezh.DATA_PART_1.getProperty());
+        }
+
 
         if (text.contains(BuhgalterOtchetnostForm1Promezh.ACTIV.getProperty()) ||
                 text.contains(BuhgalterOtchetnostForm1Promezh.ACTIV.getProperty().toUpperCase()) ||
@@ -129,7 +132,6 @@ public class HandlerTextCategory {
             LOGGER.info("Найден " + BuhgalterOtchetnostForm2Promezh.OTCHET_O_FIN_RESULT.getProperty());
             score++;
         } else {
-
             LOGGER.info("НЕ НАЙДЕН " + BuhgalterOtchetnostForm2Promezh.OTCHET_O_FIN_RESULT.getProperty());
         }
 
@@ -139,18 +141,23 @@ public class HandlerTextCategory {
                     BuhgalterOtchetnostForm2Promezh.FORMA_PO_OKUD_NUMBER.getProperty());
             score++;
         } else {
-
             LOGGER.info("НЕ НАЙДЕН " + BuhgalterOtchetnostForm2Promezh.FORMA_PO_OKUD_NUMBER.getProperty() +
                     BuhgalterOtchetnostForm2Promezh.FORMA_PO_OKUD_NUMBER.getProperty());
         }
 
-        //TODO здесь должна быть проверка на дату
+        try {
+            //TODO здесь бы желательно ещё учитывать параметры из Enum DATA_PART_...
+            ParserDate.parseDateByRegexpForExcel(text);
+            score++;
+            LOGGER.info("Найден " + BuhgalterOtchetnostForm2Promezh.DATA_PART_1.getProperty());
+        } catch (ParseException e) {
+            LOGGER.error("НЕ НАЙДЕН " + BuhgalterOtchetnostForm2Promezh.DATA_PART_1.getProperty());
+        }
 
         if (text.contains(BuhgalterOtchetnostForm2Promezh.CHISTAY_PRIBIL.getProperty())) {
             LOGGER.info("Найден " + BuhgalterOtchetnostForm2Promezh.CHISTAY_PRIBIL.getProperty());
             score++;
         } else {
-
             LOGGER.info("НЕ НАЙДЕН " + BuhgalterOtchetnostForm2Promezh.CHISTAY_PRIBIL.getProperty());
         }
 
@@ -158,7 +165,6 @@ public class HandlerTextCategory {
             LOGGER.info("Найден " + BuhgalterOtchetnostForm2Promezh.NALOG_NA_PRIBIL.getProperty());
             score++;
         } else {
-
             LOGGER.info("НЕ НАЙДЕН " + BuhgalterOtchetnostForm2Promezh.NALOG_NA_PRIBIL.getProperty());
         }
 
