@@ -15,5 +15,30 @@ Ext.define('DocumentRecognizer.view.main.MainController', {
         if (choice === 'yes') {
             //
         }
+    },
+    onExitUser: function () {
+        Ext.Ajax.request({
+            method: 'POST',
+            url: '/api/auth/logout',
+            jsonData: JSON.stringify({
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            success: function (response) {
+                var resp = [];
+                try {
+                    resp = JSON.parse(response.responseText);
+                } catch (ex) {
+                    console.log("Ошибка при загрузке специалистов");
+                }
+
+                window.location.href = "/login";
+            },
+            failure: function () {
+                window.location.href = "/login";
+            }
+        });
     }
 });

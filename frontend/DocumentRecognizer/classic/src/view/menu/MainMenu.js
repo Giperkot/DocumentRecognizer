@@ -11,9 +11,6 @@ Ext.define('DocumentRecognizer.view.menu.MainMenu', {
         'DocumentRecognizer.view.main.List'
     ],
 
-    /*controller: 'main',
-    viewModel: 'main',*/
-
     ui: 'navigation',
 
     tabBarHeaderPosition: 1,
@@ -27,7 +24,7 @@ Ext.define('DocumentRecognizer.view.menu.MainMenu', {
             align: 'stretchmax'
         },
         title: {
-            text: "KafedraDocs",
+            text: "DocumentRecognizer",
             flex: 0
         },
         iconCls: 'fa fa-th-list'
@@ -70,22 +67,36 @@ Ext.define('DocumentRecognizer.view.menu.MainMenu', {
     items: [{
         title: 'Клиенты',
         iconCls: 'fa fa-home',
-        // The following grid shares a store with the classic version's grid as well!
+        layout: 'fit',
         items: [{
-            xtype: 'mainlist'
+            xtype: 'mainlist',
+            minHeight: 500,
+            width: '100%',
+            bind: {
+                store: '{clientStore}'
+            }
         }]
     }, {
         title: 'Распознавание',
         iconCls: 'fa fa-user',
-        bind: {
-            html: '{loremIpsum}'
-        }
+        items: [
+            {
+                xtype: "directory-form",
+            }
+        ]
     }, {
         title: 'Типы документов',
         iconCls: 'fa fa-users',
-        bind: {
-            html: '{loremIpsum}'
-        }
+        items: [
+            {
+                xtype: "doc-type-grid",
+                minHeight: 500,
+                width: '100%',
+                bind: {
+                    store: '{docTypeStore}'
+                }
+            }
+        ]
     }, {
         title: 'Настройки',
         iconCls: 'fa fa-cog',

@@ -21,43 +21,6 @@ Ext.define('DocumentRecognizer.view.main.Main', {
     controller: 'main',
     viewModel: 'main',
 
-    /*ui: 'navigation',
-
-    tabBarHeaderPosition: 1,
-    titleRotation: 0,
-    tabRotation: 0,*/
-
-    /*header: {
-        layout: {
-            align: 'stretchmax'
-        },
-        title: {
-            bind: {
-                text: '{name}'
-            },
-            flex: 0
-        },
-        iconCls: 'fa fa-th-list'
-    },
-
-    tabBar: {
-        flex: 1,
-        layout: {
-            align: 'stretch',
-            overflowHandler: 'none'
-        }
-    },
-
-    responsiveConfig: {
-        tall: {
-            headerPosition: 'top'
-        },
-        wide: {
-            headerPosition: 'left'
-        }
-    },*/
-
-
     defaults: {
         tab: {
             iconAlign: 'left'
@@ -85,19 +48,17 @@ Ext.define('DocumentRecognizer.view.main.Main', {
                     padding: "7 10",
                     height: 30,
                     minWidth: 150,
-                    bind: {
-                        html: "{userEmail}"
-                    }
+                    html: "admin@mail.ru"
                 }, {
                     xtype: "container",
                     padding: "7 10",
                     height: 30,
                     minWidth: 300,
-                    bind: {
+                    html: "Добро пожаловать, admin"
+                    /*bind: {
                         html: "{userInfo}"
-                    }
-                },
-                {
+                    }*/
+                }, {
                     xtype: "button",
                     height: 30,
                     width: 100,

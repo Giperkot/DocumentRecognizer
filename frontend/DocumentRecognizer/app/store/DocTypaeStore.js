@@ -1,8 +1,8 @@
-Ext.define('DocumentRecognizer.store.ClientStore', {
+Ext.define('DocumentRecognizer.store.DocTypeStore', {
     extend: 'Ext.data.Store',
 
-    alias: 'store.clientStore',
-    storeId: 'clientStore',
+    alias: 'store.docTypeStore',
+    storeId: 'docTypeStore',
     model: 'DocumentRecognizer.model.ClientModel',
     autoLoad: true,
     proxy: {
@@ -11,7 +11,7 @@ Ext.define('DocumentRecognizer.store.ClientStore', {
         actionMethods: {
             read: 'POST'
         },
-        url: "/api/clients/clientList",
+        url: "/api/clients/documentTypeList",
         reader: {
             type: 'json',
             rootProperty: 'result',

@@ -1,17 +1,17 @@
 /**
- * This view is an example list of people.
+ *
  */
-Ext.define('DocumentRecognizer.view.main.List', {
+Ext.define('DocumentRecognizer.view.docType.DocumentTypeGrid', {
     extend: 'Ext.grid.Panel',
-    xtype: 'mainlist',
+    xtype: 'doc-type-grid',
 
     requires: [
         'DocumentRecognizer.store.Personnel'
     ],
 
-    controller: 'user-controller',
+    title: 'Результат',
 
-    title: 'Клиенты',
+    controller: "doctype-controller",
 
     tbar: {
         items: [
@@ -51,9 +51,9 @@ Ext.define('DocumentRecognizer.view.main.List', {
                 return idx + 1;
             }
         },
-        { text: 'Название организации',  dataIndex: 'name', flex: 1 },
-        { text: 'ИНН', dataIndex: 'inn', flex: 1 },
-        { text: 'КПП', dataIndex: 'kpp'}
+        { text: 'Название', dataIndex: 'title', flex: 1},
+        { text: 'Имя',  dataIndex: 'name', flex: 1 },
+        { text: 'uuid', dataIndex: 'uuid', flex: 1 }
     ],
 
     listeners: {
