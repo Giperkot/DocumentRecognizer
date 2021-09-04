@@ -90,7 +90,7 @@
         </sql>
     </changeSet>
 
-    <changeSet id="20210903123" author="istvolov" logicalFilePath="no_path">
+    <changeSet id="20210903124" author="istvolov" logicalFilePath="no_path">
         <comment>
             Создание схемы auth.
         </comment>
