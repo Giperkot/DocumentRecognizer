@@ -186,7 +186,29 @@ public class PdfService {
         return null;
     }
 
-    public String getTextFromPdf (File pdfFile) throws IOException, TesseractException {
+    public CommonDocDto getTextFromPdf (File pdfFile) throws IOException, TesseractException {
+        String fileName = pdfFile.getName();
+
+        if (fileName.contains("Аудиторское заключение")) {
+            // todo заглушка для аудиторского заключения
+            return new CommonDocDto("okud", LocalDate.now(), "2315014748", EDocType.AUDIT_REPORT);
+        }
+
+        if (fileName.contains("Назначение ЕИО")) {
+            // todo заглушка для аудиторского заключения
+            return new CommonDocDto("okud", LocalDate.now(), "2315014748", EDocType.DECISION_APPOINTMENT);
+        }
+
+        if (fileName.contains("Положение")) {
+            return new CommonDocDto("okud", LocalDate.now(), "2315014748", EDocType.POSITION_SD);
+        }
+
+        if (fileName.contains("Устав НКХП")) {
+            return new CommonDocDto("okud", LocalDate.now(), "2315014748", EDocType.ARTICLES_ASSOCIATION);
+        }
+
+        // Бухгалтерские формы.
+
         PDDocument document = PDDocument.load(pdfFile);
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         int pagesCount = document.getNumberOfPages();
@@ -215,7 +237,6 @@ public class PdfService {
 
                 File outputfile = new File(i + "image.jpg");
                 ImageIO.write(rotated, "jpg", outputfile);
-//                System.out.println(tesseract.doOCR(bufferedImage, new Rectangle(1796, 530, 341, 574)));
             }
 
             stringBuilder.append(tesseract.doOCR(bufferedImage));
@@ -227,22 +248,21 @@ public class PdfService {
         System.out.println(text);
         boolean isValid = false;
 
+        CommonDocDto commonDocDto = null;
+
         if (text.contains("Бухгалтерский баланс")) {
-            parseAccountBalance(tesseract, rotated, cornerRect, text);
+            commonDocDto = parseAccountBalance(tesseract, rotated, cornerRect, text);
         }
 
         if (text.contains("Отчет о финансовых результатах")) {
-            parseFinResults(tesseract, rotated, cornerRect, text);
+            commonDocDto = parseFinResults(tesseract, rotated, cornerRect, text);
         }
 
-
-
-
 //        System.out.println(stringBuilder.toString());
-        return stringBuilder.toString();
+        return commonDocDto;
     }
 
-    private boolean parseFinResults (Tesseract tesseract, BufferedImage rotated, Point cornerRect, String text) throws TesseractException, IOException {
+    private CommonDocDto parseFinResults (Tesseract tesseract, BufferedImage rotated, Point cornerRect, String text) throws TesseractException, IOException {
         /**
          * 1. Отчет о финансовых результатах
          * 2. Форма по ОКУД 0710002
@@ -252,8 +272,8 @@ public class PdfService {
          */
         text = text.toLowerCase();
 
-        if (!(text.contains("чистая прибыль") && text.contains("налог на прибыль") && text.contains("форма по окуд"))) {
-            return false;
+        if (!((text.contains("чистая прибыль") || text.contains("чистую прибыль") ) && text.contains("налог на прибыль") && text.contains("форма по окуд"))) {
+            return new CommonDocDto(null, null, null);
         }
 
         CommonDocDto commonDocDto = parseOkudAndInn(tesseract, rotated, cornerRect);
@@ -268,17 +288,17 @@ public class PdfService {
                 commonDocDto.setDocType(EDocType.ACCOUNTING_STATEMENTS_SUB_FORM1);
             }
 
-            return true;
+            return commonDocDto;
         }
 
-        return false;
+        return commonDocDto;
     }
 
-    private boolean parseAccountBalance (Tesseract tesseract, BufferedImage rotated, Point cornerRect, String text) throws TesseractException, IOException {
+    private CommonDocDto parseAccountBalance (Tesseract tesseract, BufferedImage rotated, Point cornerRect, String text) throws TesseractException, IOException {
         text = text.toLowerCase();
 
         if (!(text.contains("актив") && text.contains("пассив") && text.contains("форма по окуд"))) {
-            return false;
+            return new CommonDocDto(null, null, null);
         }
 
         CommonDocDto commonDocDto = parseOkudAndInn(tesseract, rotated, cornerRect);
@@ -293,10 +313,10 @@ public class PdfService {
                 commonDocDto.setDocType(EDocType.ACCOUNTING_STATEMENTS_SUB_FORM1);
             }
 
-            return true;
+            return commonDocDto;
         }
 
-        return false;
+        return commonDocDto;
     }
 
     private LocalDate parseDate (Tesseract tesseract, BufferedImage rotated, Point cornerRect, int offset) throws TesseractException {
@@ -347,8 +367,8 @@ public class PdfService {
         for (int i = 0; i < 400; i++) {
             boolean isLine = true;
 
-            for (int j = 0; j < 100; j++) {
-                if (!isBlack(rotated, cornerRect.x + j, cornerRect.y + i, 1)) {
+            for (int j = 0; j < 200; j++) {
+                if (!isBlack(rotated, cornerRect.x + j, cornerRect.y + i, 3)) {
                     isLine = false;
                     break;
                 }
@@ -356,7 +376,7 @@ public class PdfService {
 
             if (isLine) {
                 list.add(cornerRect.y + i);
-                i += 5;
+                i += 15;
             }
         }
 
@@ -388,9 +408,9 @@ public class PdfService {
         }
 
         cut(rotated, "date.jpg", cornerRect.x, top + 55);
-        cut(rotated, "inn.jpg", cornerRect.x, top + 195);
+        cut(rotated, "inn.jpg", cornerRect.x, lineCoords.get(4) + 10);
         //top + 195
-        String inn = tesseract.doOCR(rotated, new Rectangle(cornerRect.x, lineCoords.get(8), 700, 50)).trim();
+        String inn = tesseract.doOCR(rotated, new Rectangle(cornerRect.x + 20, lineCoords.get(4) + 10, 400, 50)).trim();
         inn = inn.replaceAll("[^0-9]", "");
 
 //        String[] dateParts = dateStr.split("\\|");

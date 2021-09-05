@@ -1,5 +1,6 @@
 package ru.digitalsoft.document.controller;
 
+import net.sourceforge.tess4j.TesseractException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class DocumentRecognizerController {
     }
 
     @GetMapping("/scan")
-    public List<ParseDto> redirectWithUsingRedirectView() {
+    public List<ParseDto> redirectWithUsingRedirectView() throws IOException, TesseractException {
         String mockPath = "C:\\Users\\istvolov\\Documents\\leaderSoft 2021\\Тестовый dataset\\Тестовый dataset";
 
         Map<String, String> resultMap = documentRecognizerService.searchAndDefinitionCategoryOfText(mockPath);

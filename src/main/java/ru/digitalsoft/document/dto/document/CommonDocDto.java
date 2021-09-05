@@ -20,6 +20,13 @@ public class CommonDocDto {
         this.inn = inn;
     }
 
+    public CommonDocDto(String okud, LocalDate date, String inn, EDocType docType) {
+        this.okud = okud;
+        this.date = date;
+        this.inn = inn;
+        this.docType = docType;
+    }
+
     public String getOkud() {
         return okud;
     }
@@ -50,5 +57,15 @@ public class CommonDocDto {
 
     public void setDocType(EDocType docType) {
         this.docType = docType;
+    }
+
+    @Override
+    public String toString() {
+        return "CommonDocDto{" +
+                "okud='" + okud + '\'' +
+                ", date=" + date +
+                ", inn='" + inn + '\'' +
+                ", docType=" + docType +
+                '}';
     }
 }

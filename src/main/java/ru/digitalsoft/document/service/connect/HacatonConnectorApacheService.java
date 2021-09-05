@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.digitalsoft.document.dto.document.CommonDocDto;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +29,18 @@ public class HacatonConnectorApacheService {
     private String urlHacatonServer;
 
 
+    public String sendInfoToHacatonServer(CommonDocDto docDto, String path) throws IOException {
+        return send(path, docDto.getDocType().getType(), docDto.getInn(), false);
+    }
+
     public String sendInfoToHacatonServer() throws IOException {
+        return send("C:\\Users\\istvolov\\Documents\\leaderSoft 2021\\Тестовый dataset\\Тестовый dataset\\ПАО НКХП 2315014748\\Финансовое досье\\2020\\4 квартал\\Бухгалтерская отчетность\\Форма 1.pdf",
+                "4f501f4a-c665-4cc8-9715-6ed26e7819f2", "2315014748", false);
+    }
+
+    public String send (String path, String docType, String inn, boolean unrecognize) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        File file = new File("C:\\Users\\istvolov\\Documents\\leaderSoft 2021\\Тестовый dataset\\Тестовый dataset\\ПАО НКХП 2315014748\\Финансовое досье\\2020\\4 квартал\\Бухгалтерская отчетность\\Форма 1.pdf");
+        File file = new File(path);
         HttpPost post = new HttpPost(urlHacatonServer);
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -38,9 +48,9 @@ public class HacatonConnectorApacheService {
 
         FileBody fileBody = new FileBody(file, ContentType.DEFAULT_BINARY);
 
-        String textPart = "{\"documentNomenclatureId\": \"4f501f4a-c665-4cc8-9715-6ed26e7819f2\",\n" +
-                "\"inn\": \"2315014748\",\n" +
-                "\"unrecognised\": false\n" +
+        String textPart = "{\"documentNomenclatureId\": \"" + docType + "\",\n" +
+                "\"inn\": \"" + inn + "\",\n" +
+                "\"unrecognised\": " + unrecognize + "\n" +
                 "}";
 
         builder.addPart("attachments", fileBody);
