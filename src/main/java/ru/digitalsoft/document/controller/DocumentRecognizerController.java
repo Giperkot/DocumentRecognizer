@@ -72,7 +72,7 @@ public class DocumentRecognizerController {
     }
 
     @GetMapping("/connect/hacaton/apache")
-    public void connectApache() throws IOException {
-        hacatonConnectorApacheService.sendInfoToHacatonServer();
+    public String connectApache() throws IOException {
+        return hacatonConnectorApacheService.sendInfoToHacatonServer();
     }
 }
